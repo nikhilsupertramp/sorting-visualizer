@@ -2,18 +2,22 @@ import React, {useState} from 'react';
 import './App.css';
 import { Emoji, EmojiStyle } from 'emoji-picker-react';
 import img from './img.jpeg';
+import SortingVisualizer from './SortingVisualizer';
 
 
 function App() {
-  const isIntitalContent = true;
-  const [content, setContent] = useState(isIntitalContent);
-  return (
-    <>
-    {content && <InitialContent content = {content} setContent={setContent} />} 
-    {!content && <SecondaryContent content = {content} setContent={setContent}/>}
-    </>
-  );
+  // const isIntitalContent = true;
+  // const [content, setContent] = useState(isIntitalContent);
+  // return (
+  //   <>
+  //   {content && <InitialContent content = {content} setContent={setContent} />} 
+  //   {!content && <SecondaryContent content = {content} setContent={setContent}/>}
+  //   </>
+  // );
+
+  return <SortingVisualizer/>
 }
+
 
 const SecondaryContent = ({content, setContent}) => (
   <div className='App'>

@@ -1,0 +1,50 @@
+.container {
+  position: absolute;
+  margin: 0 auto;
+  top: 50%;
+  transform: translate(0, -50%);
+
+  align-items: flex-stretch;
+  display: flex;
+}
+  
+.item {
+  display: flex;
+  flex-grow: 3;
+}
+
+.left-guys-array-box {
+  background-color: lightyellow;
+  align-items: flex-end;
+
+  /* margin-top: auto; */
+}
+
+  .right-guys-array-box {
+    /* margin-top: auto; */
+    background-color: red;
+    align-items: flex-end;
+
+  }
+
+  .all-other-guys {
+    /* margin-top: auto; */
+    background-color: aliceblue;
+    align-items: flex-end;
+
+  }
+                  
+  
+  .array-bar {
+    width: 10px;
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: auto;
+    /* 
+    
+    margin-bottom: 0px; */
+    bottom: 0;
+
+    /* border: 10px solid black */
+  }
