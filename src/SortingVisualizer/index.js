@@ -3,7 +3,9 @@ import { getMergeSortAnimations } from '../sortingAlgorithms/sortingAlgorithms.j
 import './SortingVisualizer.css';
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 30;
+const NUMBER_OF_ARRAY_BARS = 33;
+
+const TIMEOUT_TIME = 5000;
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'turquoise';
@@ -19,6 +21,7 @@ export default class SortingVisualizer extends React.Component {
       leftGuys: [],
       rightGuys: [],
       allOtherGuysOnRight: [],
+      displayArray: []
     };
   }
 
@@ -29,22 +32,35 @@ export default class SortingVisualizer extends React.Component {
   resetArray() {
     const array = [];
     for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
-      array.push(randomIntFromInterval(5, 300));
+      array.push(randomIntFromInterval(5, 500));
     }
-    this.setState({...this.state, isInitialization: true, array: array });
+    this.setState({...this.state, isInitialization: true, array: array, displayArray: array });
   }
 
   mergeSort() {
     const animations = getMergeSortAnimations(this.state.array);
-    // console.log(animations);
+    const sortedArrayToDisplayOnLeft = this.state.array.slice();
     for(const i in animations) {
       const animation = animations[i];
-      console.log(animation);
-      const { leftPart, rightPart, transitions, currentArray } = animation;
-      const { allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight } = adjustStateBasedOnAnimation(this.state.array, leftPart, rightPart);
-      this.setState({...this.state, isInitialization: false, allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight});
-      setTimeout(() => {
-      }, 5000 * i);
+      (function (self) {
+          setTimeout(() => {
+          /*
+          
+          */
+
+
+            const { leftPart, rightPart, currentArray } = animation;
+            const { allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight } = adjustStateBasedOnAnimation(sortedArrayToDisplayOnLeft, currentArray, self.state.displayArray, leftPart, rightPart);
+            self.setState({...self.state, 
+              isInitialization: false, 
+              allOtherGuysOnLeft: allOtherGuysOnLeft, 
+              leftGuys : leftGuys, 
+              rightGuys: rightGuys, 
+              allOtherGuysOnRight:allOtherGuysOnRight,
+              displayArray: sortedArrayToDisplayOnLeft,
+            });
+        }, TIMEOUT_TIME * i);
+      })(this)
     };
   }
 
@@ -66,13 +82,13 @@ export default class SortingVisualizer extends React.Component {
 
   render() {
     // console.log(this.state);
-    const { isInitialization, array, allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight } = this.state;
+    const { isInitialization, displayArray, allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight } = this.state;
     return (
       <div>
         <div className="container">
           { isInitialization ? (
             <div className='all-other-guys item'>
-              {getArrayBarsFromArray(array)}
+              {getArrayBarsFromArray(displayArray)}
             </div>
           ) : (
             <React.Fragment>
@@ -123,13 +139,14 @@ const getArrayBarsFromArray = (array) => {
   ));
 }
 
-const adjustStateBasedOnAnimation = (array, leftPart, rightPart) => {
-  console.log(leftPart, rightPart);
-  const allOtherGuysOnLeft = array.slice(0, leftPart[0]);
-  const leftGuys = array.slice(leftPart[0], leftPart[1]);
-  const rightGuys = array.slice(rightPart[0], rightPart[1]);
-  const allOtherGuysOnRight = array.slice(rightPart[1], array.length)
-  console.log(allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight);
+const adjustStateBasedOnAnimation = (sortedArrayToDisplayOnLeft, currentArray, array, leftPart, rightPart) => {
+  // console.log(leftPart, rightPart);
+  copyArrayIntoLeftSortedArray(sortedArrayToDisplayOnLeft, currentArray, leftPart, rightPart);
+  const allOtherGuysOnLeft = sortedArrayToDisplayOnLeft.slice(0, leftPart[0]);
+  const leftGuys = array.slice(leftPart[0], leftPart[1] + 1);
+  const rightGuys = array.slice(rightPart[0], rightPart[1] + 1);
+  const allOtherGuysOnRight = array.slice(rightPart[1] + 1, array.length)
+  // console.log(allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight);
   return {allOtherGuysOnLeft, leftGuys, rightGuys, allOtherGuysOnRight};
 }
 
@@ -147,4 +164,12 @@ function arraysAreEqual(arrayOne, arrayTwo) {
     }
   }
   return true;
+}
+
+const copyArrayIntoLeftSortedArray = (arrayToHaveCopiedValues, arrayToBeCopied, leftRange, rightRange) => {
+  for(let i = leftRange[0]; i <= rightRange[1]; i++) {
+    arrayToHaveCopiedValues[i] = arrayToBeCopied[i];
+  }
+  console.log(arrayToHaveCopiedValues);
+  return arrayToHaveCopiedValues;
 }

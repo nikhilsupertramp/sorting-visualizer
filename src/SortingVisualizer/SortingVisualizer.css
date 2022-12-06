@@ -3,7 +3,7 @@
   margin: 0 auto;
   top: 50%;
   transform: translate(0, -50%);
-
+  margin-left: 40px;
   align-items: flex-stretch;
   display: flex;
 }
@@ -14,7 +14,7 @@
 }
 
 .left-guys-array-box {
-  background-color: lightyellow;
+  background-color: orange;
   align-items: flex-end;
 
   /* margin-top: auto; */
